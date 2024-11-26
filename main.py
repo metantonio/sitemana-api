@@ -97,6 +97,29 @@ def suppress_domain_level():
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {e}")
 
+def suppress_contact_csv():
+    host = host_entry.get()
+    csv_url = csv_url_entry.get()
+    if not csv_url or not host:
+        messagebox.showwarning("Input Error", "Please enter both CSV URL and host")
+        return
+    url = f"https://api.sitemana.com/v1/suppressContactCSV?apikey={API_KEY}"
+    payload = {
+        "host": host,
+        "csv": csv_url
+    }
+    try:
+        response = requests.post(url, json=payload)
+        if response.status_code == 200:
+            data = response.json()
+            formatted_data = json.dumps(data, indent=4)
+            show_custom_messagebox("Suppress Contact CSV", formatted_data)
+            save_json_to_file(data)
+        else:
+            messagebox.showerror("Error", f"Failed to suppress contact CSV. Status code: {response.status_code}")
+    except Exception as e:
+        messagebox.showerror("Error", f"An error occurred: {e}")
+
 def save_json_to_file(data):
     formatted_data = json.dumps(data, indent=4)
     file_path = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")])
@@ -122,11 +145,16 @@ tk.Label(root, text="Host:").grid(row=2, column=0)
 host_entry = tk.Entry(root)
 host_entry.grid(row=2, column=1)
 
+tk.Label(root, text="CSV URL:").grid(row=3, column=0)
+csv_url_entry = tk.Entry(root)
+csv_url_entry.grid(row=3, column=1)
+
 # Crear botones
-tk.Button(root, text="Get Daily Report", command=get_daily_report).grid(row=3, column=0, pady=10)
-tk.Button(root, text="Get Last 100 Visitors", command=get_last_100_visitors).grid(row=3, column=1, pady=10)
-tk.Button(root, text="Suppress Account Level", command=suppress_account_level).grid(row=4, column=0, pady=10)
-tk.Button(root, text="Suppress Domain Level", command=suppress_domain_level).grid(row=4, column=1, pady=10)
+tk.Button(root, text="Get Daily Report", command=get_daily_report).grid(row=4, column=0, pady=10)
+tk.Button(root, text="Get Last 100 Visitors", command=get_last_100_visitors).grid(row=4, column=1, pady=10)
+tk.Button(root, text="Suppress Account Level", command=suppress_account_level).grid(row=5, column=0, pady=10)
+tk.Button(root, text="Suppress Domain Level", command=suppress_domain_level).grid(row=5, column=1, pady=10)
+tk.Button(root, text="Suppress Contact CSV", command=suppress_contact_csv).grid(row=6, column=0, pady=10)
 
 # Ejecutar el bucle principal de Tkinter
 root.mainloop()

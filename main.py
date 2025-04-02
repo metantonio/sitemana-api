@@ -9,7 +9,7 @@ API_KEY = "602540f74e99dc5183bf563fca795c70"
 
 # Lista de Domain IDs conocidos
 KNOWN_DOMAIN_IDS = [
-    {"name":"www.qlx.com","id":"672ce0eec9c8622bbea4e655"}
+    {"name":"www.qlx.com","id":"1111"}
     ]
 
 # Crear un diccionario para acceder a los IDs por nombre
